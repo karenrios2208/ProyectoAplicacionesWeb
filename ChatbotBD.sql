@@ -1,9 +1,9 @@
 
-CREATE DATABASE Chatbot;
-create type estado_proceso as enum ('Pendiente', 'Aceptado', 'Rechazado');
+Create database Chatbot;
+Create type estado_proceso as enum ('Pendiente', 'Aceptado', 'Rechazado');
 
 Create table cliente(
-   cId int,
+   cliente_id SERIAL,
    nombres text NOT NULL,
    apellidos text NOT NULL,
    estado_civil text,
@@ -20,18 +20,18 @@ Create table cliente(
    fecha_nacimiento date,
    pais text,
    password text NOT NULL ,
-   PRIMARY KEY( cId)
+   primary key (cliente_id)
 );
 
 
 Create table solicitud(
-   sId int,
-   cId int,
+   solicitud_id SERIAL,
+   cliente_id int,
    fecha_inicio date,
    fecha_cierre date,
    monto decimal,
    estado_proceso estado_proceso,
-   foreign key(cId) references cliente(cId),
-   PRIMARY KEY( sId)
+   foreign key(cliente_id) references cliente(cliente_id),
+   primary key (solicitud_id)
 );
 
