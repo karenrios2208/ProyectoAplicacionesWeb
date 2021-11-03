@@ -1,34 +1,9 @@
-import Swal from 'sweetalert2';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 
-export const Navigation = (props) => {
-  const lggr = async () => {
-    const { value: formValues } = await Swal.fire({
-      title: 'Multiple inputs',
-      backdrop: `
-  rgba(0,0,123,0.4)
-  left top
-  no-repeat
-`,
-      html:
-        '<h6 style=margin-left:0px">Usuario</h7>' +
-        '<br>' +
-        '<input id="swal-input1" class="swal2-input">' +
-        '<h6 style="margin-left:0px">Contraseña</h7>' +
-        '<input id="swal-input2" class="swal2-input">',
-      focusConfirm: false,
-      confirmButtonText: 'Submit',
-      preConfirm: () => {
-        return [
-          document.getElementById('swal-input1').value,
-          document.getElementById('swal-input2').value,
-        ];
-      },
-    });
+export const Navigation = () => {
+  const history = useHistory();
 
-    if (formValues) {
-      Swal.fire(JSON.stringify(formValues));
-    }
-  };
   return (
     <nav id="menu" className="navbar navbar-default navbar-fixed-top">
       <div className="container">
@@ -72,7 +47,7 @@ export const Navigation = (props) => {
             </li>
             <li>
               <a href="#portfolio" className="page-scroll">
-                Guía de prestamo
+                Guía de préstamo
               </a>
             </li>
             <li>
@@ -83,8 +58,8 @@ export const Navigation = (props) => {
 
             <li>
               <button
-                class="'btns btn--primary  btn--outline btn--large  page-scroll' "
-                onClick={() => lggr()}
+                className="'btns btn--primary  btn--outline btn--large  page-scroll' "
+                onClick={() => history.push('/login')}
               >
                 Sign-in
               </button>
