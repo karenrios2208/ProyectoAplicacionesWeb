@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
+  Alert,
   Dialog,
   TextField,
   Button,
@@ -9,26 +10,40 @@ import {
   DialogContent,
 } from '@mui/material';
 
+import { login } from '../auth';
+
 const LoginModal = (): JSX.Element => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const history = useHistory();
 
   const close = () => history.push('/');
   const onLogin = () =>
-    fetch('http://localhost:5000/login', {
+    fetch('http://localhost:5000/api/login', {
       method: 'POST',
       headers: {
-        'content-type': 'application/x-www-form-urlencoded',
+        'content-type': 'application/json',
       },
-      body: `email=${email}&password=${password}&submit=Log+in`,
-    });
+      body: JSON.stringify({ email, password }),
+    })
+      .then((r) => r.json())
+      .then((token: any) => {
+        if (token.access_token) {
+          login(token);
+          history.push('/account');
+        } else {
+          setError(token.message);
+          console.error(token);
+        }
+      });
 
   return (
     <Dialog open onClose={close}>
       <DialogTitle>Inicio de sesión</DialogTitle>
       <DialogContent>
-        <form>
+        <form style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {error && <Alert severity="error">{error}</Alert>}
           <TextField
             autoFocus
             label="Correo electrónico"
@@ -43,6 +58,7 @@ const LoginModal = (): JSX.Element => {
             type="password"
             fullWidth
             variant="standard"
+            autoComplete="current_password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

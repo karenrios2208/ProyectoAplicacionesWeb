@@ -1,13 +1,7 @@
-from chatbot_back import db, login_manager
-from flask_login import UserMixin
+from chatbot_back import db
 
-# Authentication manager
-@login_manager.user_loader
-def load_user(cuenta_id):
-    return Cuenta.query.get(int(cuenta_id))
 
-# Cuenta object, inherits from UserMixin to help login manager
-class Cuenta(db.Model, UserMixin):
+class Cuenta(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     usuario = db.Column(db.Text, unique=True)
     password = db.Column(db.Text, nullable=False)
@@ -20,9 +14,27 @@ class Cuenta(db.Model, UserMixin):
     def __repr__(self):
         return f"Cuenta('{self.usuario}':'{self.cliente.email}')"
 
+    @classmethod
+    def lookup(cls, email):
+        return Cuenta.query.filter(Cuenta.cliente.has(email=email)).first()
+
+    @classmethod
+    def identify(cls, id):
+        return cls.query.get(id)
+
+    @property
+    def identity(self):
+        return self.id
+
+    @property
+    def rolenames(self):
+        return ["cliente"]
+
+
 class Cliente(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    cuenta_id = db.Column(db.Integer, db.ForeignKey('cuenta.id', ondelete='CASCADE'), unique=True, nullable=False)
+    cuenta_id = db.Column(db.Integer, db.ForeignKey(
+        'cuenta.id', ondelete='CASCADE'), unique=True, nullable=False)
     nombres = db.Column(db.Text, nullable=False)
     apellidos = db.Column(db.Text, nullable=False)
     estado_civil = db.Column(db.Text)
@@ -41,13 +53,16 @@ class Cliente(db.Model):
     def __repr__(self):
         return f"Cliente('{self.nombres}', '{self.apellidos}')"
 
+
 class Solicitud(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    cuenta_id = db.Column(db.Integer, db.ForeignKey('cuenta.id', ondelete='CASCADE'), unique=True, nullable=False)
+    cuenta_id = db.Column(db.Integer, db.ForeignKey(
+        'cuenta.id', ondelete='CASCADE'), unique=True, nullable=False)
     fecha_inicio = db.Column(db.DateTime)
     fecha_cierre = db.Column(db.DateTime)
     monto = db.Column(db.Numeric)
-    estado_proceso = db.Column(db.Enum('Pendiente', 'Aceptado', 'Rechazado', name='estado_proceso', create_type=False))
+    estado_proceso = db.Column(db.Enum(
+        'Pendiente', 'Aceptado', 'Rechazado', name='estado_proceso', create_type=False))
 
     def __repr__(self):
         return f"Solicitud('{self.id}', '{self.monto}')"
