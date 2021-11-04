@@ -7,7 +7,9 @@ from chatbot_back.models import *
 
 @app.route('/api/register', methods=['POST'])
 def registration():
-    form = Registration()
+    json = request.get_json()
+    form = Registration.from_json(json)
+    print(json, form.data, form.validate())
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(
             form.password.data).decode('utf-8')
@@ -20,8 +22,8 @@ def registration():
         db.session.add(cliente)
         db.session.commit()
         flash(f'Account created for {form.username.data}!', 'success')
-        return redirect("/login")
-    return "", 200
+        return jsonify({"status": 200}), 200
+    return jsonify({"status": 400, "errors": form.errors}), 200
 
 
 @app.route('/api/refresh', methods=['POST'])

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
+  Alert,
   Dialog,
   TextField,
   Button,
@@ -23,6 +24,7 @@ const RegisterModal = (): JSX.Element => {
     password: '',
     confirm_password: '',
   });
+  const [error, setError] = useState('');
   const history = useHistory();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -30,24 +32,30 @@ const RegisterModal = (): JSX.Element => {
 
   const close = () => history.push('/');
   const onRegister = async () => {
-    await fetch('http://localhost:5000/api/register', {
+    const res = await fetch('http://localhost:5000/api/register', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
       },
       body: JSON.stringify({
         ...form,
-        fecha_nacimiento: format(form.fecha_nacimiento, '%Y-%M-%D'),
+        fecha_nacimiento: format(form.fecha_nacimiento, 'Y-M-d'),
       }),
     });
+    const resB = await res.json();
+    if (resB.status === 200) {
+      history.push('/login');
+    } else {
+      setError('Asegúrate de llenar todos los campos correctamente');
+    }
   };
-  console.log(form);
 
   return (
     <Dialog open onClose={close} style={{ fontSize: '16px' }}>
       <DialogTitle>Regístrate</DialogTitle>
       <DialogContent>
         <form style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {error && <Alert severity="error">{error}</Alert>}
           <TextField
             autoFocus
             label="Usuario"
