@@ -1,51 +1,48 @@
-from flask import render_template, url_for, flash, redirect, request
-from chatbot_back import app, db, bcrypt
+from flask import flash, redirect, request, jsonify
+from flask_praetorian import auth_required, current_user
+from chatbot_back import app, db, bcrypt, guard
 from chatbot_back.forms import Registration, Login
 from chatbot_back.models import *
-from flask_login import login_user, current_user, logout_user, login_required
 
-@app.route('/')
-def home():
-    return render_template('home.html')
 
-@app.route('/registration', methods=['GET', 'POST'])
+@app.route('/api/register', methods=['POST'])
 def registration():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
     form = Registration()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        hashed_password = bcrypt.generate_password_hash(
+            form.password.data).decode('utf-8')
         cuenta = Cuenta(usuario=form.username.data, password=hashed_password)
         db.session.add(cuenta)
         db.session.commit()
-        cliente = Cliente(cuenta_id=cuenta.id, nombres=form.nombres.data, apellidos=form.apellidos.data, email=form.email.data, fecha_nacimiento=form.fecha_nacimiento.data)
+        cliente = Cliente(cuenta_id=cuenta.id, nombres=form.nombres.data,
+                          apellidos=form.apellidos.data, email=form.email.data,
+                          fecha_nacimiento=form.fecha_nacimiento.data)
         db.session.add(cliente)
         db.session.commit()
         flash(f'Account created for {form.username.data}!', 'success')
-        return redirect(url_for('login'))
-    return render_template('registration.html', form=form)
+        return redirect("/login")
+    return "", 200
 
-@app.route('/login', methods=['GET', 'POST'])
+
+@app.route('/api/refresh', methods=['POST'])
+def refresh():
+    old_token = request.get_data()
+    new_token = guard.refresh_jwt_token(old_token)
+    ret = {'access_token': new_token}
+    return ret, 200
+
+
+@app.route('/api/login', methods=['POST'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form = Login()
-    if form.validate_on_submit():
-        cuenta = Cuenta.query.filter(Cuenta.cliente.has(email=form.email.data)).first()
-        if cuenta and bcrypt.check_password_hash(cuenta.password, form.password.data):
-            login_user(cuenta, remember=form.remember.data)
-            next = request.args.get('next')
-            return redirect(next) if next else redirect(url_for('home'))
-        else:
-            flash('Login unsuccessful! Check the submited information.', 'danger')
-    return render_template('login.html', form=form)
+    req = request.get_json(force=True)
+    email = req.get("email", None)
+    password = req.get("password", None)
+    user = guard.authenticate(email, password)
+    ret = {"access_token": guard.encode_jwt_token(user)}
+    return jsonify(ret), 200
 
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('home'))
 
-@app.route('/account')
-@login_required
+@app.route('/api/account')
+@auth_required
 def account():
-    return render_template('account.html')
+    return current_user().__repr__(), 200
