@@ -14,6 +14,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import esLocale from 'date-fns/locale/es';
 import { format } from 'date-fns';
 
+
 const RegisterModal = (): JSX.Element => {
   const [form, setForm] = useState({
     username: '',
@@ -24,14 +25,133 @@ const RegisterModal = (): JSX.Element => {
     password: '',
     confirm_password: '',
   });
-  const [error, setError] = useState('');
+  const [excep, setExcep] = useState('');
+  const [errors, setError] = useState({
+    username: '',
+    email: '',
+    nombres: '',
+    apellidos: '',
+    password: '',
+    confirm_password: '',
+  });
+
   const history = useHistory();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
+  const handleValidation = () => {
+    let fields = form;
+    let error = {
+      username: '',
+      email: '',
+      nombres: '',
+      apellidos: '',
+      password: '',
+      confirm_password: '',
+    };
+    let formIsValid = true;
+
+    //username
+    if (!fields['username']) {
+      formIsValid = false;
+
+      error['username'] = 'No puede estar vacío';
+    }
+
+    //Name
+    if (!fields['nombres']) {
+      formIsValid = false;
+
+      error['nombres'] = 'No puede estar vacío';
+    }
+
+    if (typeof fields['nombres'] !== 'undefined') {
+      if (!fields['nombres'].match(/^[a-zA-Z]+$/)) {
+        formIsValid = false;
+        error['nombres'] = 'Solamente se permiten letras';
+      }
+    }
+    //Apellidos
+
+    if (!fields['apellidos']) {
+      formIsValid = false;
+
+      error['apellidos'] = 'No puede estar vacío';
+    }
+
+    if (typeof fields['apellidos'] !== 'undefined') {
+      if (!fields['apellidos'].match(/^[a-zA-Z]+$/)) {
+        formIsValid = false;
+        error['apellidos'] = 'Solamente se permiten letras';
+      }
+    }
+
+    //Email
+    if (!fields['email']) {
+      formIsValid = false;
+      error['email'] = 'No puede estar vacío';
+    }
+
+    if (typeof fields['email'] !== 'undefined') {
+      let lastAtPos = fields['email'].lastIndexOf('@');
+      let lastDotPos = fields['email'].lastIndexOf('.');
+
+      if (
+        !(
+          lastAtPos < lastDotPos &&
+          lastAtPos > 0 &&
+          fields['email'].indexOf('@@') === -1 &&
+          lastDotPos > 2 &&
+          fields['email'].length - lastDotPos > 2
+        )
+      ) {
+        formIsValid = false;
+        error['email'] = 'Email no es válido';
+      }
+    }
+    //password
+    if (!fields['password']) {
+      formIsValid = false;
+
+      error['password'] = 'No puede estar vacío';
+    }
+
+    if (typeof fields['password'] !== 'undefined') {
+      var strongRegex = new RegExp(
+        '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})',
+      );
+
+      if (!strongRegex.test(fields['password'])) {
+        error['password'] =
+          'min 8 caracteres, una letra minúscula y una mayúscula, un número y un caracter especial';
+        formIsValid = false;
+      }
+    }
+
+    //confirm password
+
+    if (fields['password'] !== fields['confirm_password']) {
+      formIsValid = false;
+
+      error['confirm_password'] = 'No coinciden las contraseñas';
+    }
+
+    setError({
+      username: error['username'],
+      email: error['email'],
+      nombres: error['nombres'],
+      apellidos: error['apellidos'],
+      password: error['password'],
+      confirm_password: error['confirm_password'],
+    });
+
+    return formIsValid;
+  };
+
   const close = () => history.push('/');
   const onRegister = async () => {
+    if (!handleValidation()) return;
     const res = await fetch('http://localhost:5000/api/register', {
       method: 'POST',
       headers: {
@@ -42,12 +162,13 @@ const RegisterModal = (): JSX.Element => {
         fecha_nacimiento: format(form.fecha_nacimiento, 'Y-M-d'),
       }),
     });
+
     const resB = await res.json();
-    if (resB.status === 200) {
-      history.push('/login');
-    } else {
-      setError('Asegúrate de llenar todos los campos correctamente');
-    }
+
+    // TODO: Show a toast to let the user know about a server error
+    if (resB.status != 200) setExcep('Unknown server error');
+
+    history.push('/login');
   };
 
   return (
@@ -55,7 +176,7 @@ const RegisterModal = (): JSX.Element => {
       <DialogTitle>Regístrate</DialogTitle>
       <DialogContent>
         <form style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {error && <Alert severity="error">{error}</Alert>}
+          {excep && <Alert severity="error">{excep}</Alert>}
           <TextField
             autoFocus
             label="Usuario"
@@ -66,6 +187,9 @@ const RegisterModal = (): JSX.Element => {
             value={form.username}
             onChange={handleChange}
           />
+          {errors['username'] && (
+            <Alert severity="error">{errors['username']}</Alert>
+          )}
           <TextField
             autoFocus
             label="Correo electrónico"
@@ -76,6 +200,7 @@ const RegisterModal = (): JSX.Element => {
             value={form.email}
             onChange={handleChange}
           />
+          {errors['email'] && <Alert severity="error">{errors['email']}</Alert>}
           <TextField
             autoFocus
             label="Nombres"
@@ -86,6 +211,10 @@ const RegisterModal = (): JSX.Element => {
             value={form.nombres}
             onChange={handleChange}
           />
+          {errors['nombres'] && (
+            <Alert severity="error">{errors['nombres']}</Alert>
+          )}
+
           <TextField
             autoFocus
             label="Apellidos"
@@ -96,6 +225,10 @@ const RegisterModal = (): JSX.Element => {
             value={form.apellidos}
             onChange={handleChange}
           />
+
+          {errors['apellidos'] && (
+            <Alert severity="error">{errors['apellidos']}</Alert>
+          )}
           <LocalizationProvider dateAdapter={AdapterDateFns} locale={esLocale}>
             <DatePicker
               label="Fecha de nacimiento"
@@ -118,6 +251,9 @@ const RegisterModal = (): JSX.Element => {
             value={form.password}
             onChange={handleChange}
           />
+          {errors['password'] && (
+            <Alert severity="error">{errors['password']}</Alert>
+          )}
           <TextField
             label="Confirme la contraseña"
             type="password"
@@ -127,6 +263,9 @@ const RegisterModal = (): JSX.Element => {
             value={form.confirm_password}
             onChange={handleChange}
           />
+          {errors['confirm_password'] && (
+            <Alert severity="error">{errors['confirm_password']}</Alert>
+          )}
         </form>
       </DialogContent>
       <DialogActions>
