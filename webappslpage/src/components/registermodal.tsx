@@ -166,7 +166,7 @@ const RegisterModal = (): JSX.Element => {
     const resB = await res.json();
 
     // TODO: Show a toast to let the user know about a server error
-    if (resB.status != 200) setExcep('Unknown server error');
+    if (resB.status !== 200) setExcep('Unknown server error');
 
     history.push('/login');
   };

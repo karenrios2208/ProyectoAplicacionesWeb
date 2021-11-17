@@ -31,7 +31,7 @@ const LoginModal = (): JSX.Element => {
       .then((token: any) => {
         if (token.access_token) {
           login(token);
-          history.push('/account');
+          history.push('/profile');
         } else {
           setError(token.message);
           console.error(token);

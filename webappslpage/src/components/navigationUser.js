@@ -1,12 +1,16 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { logout } from '../auth';
 
 
-
-export const Navigation = () => {
+export const NavigationUser = () => {
   const history = useHistory();
+ function Onlogout (){
+    logout()
+  
+    history.push('/');
 
-
+  }
   return (
     <nav id="menu" className="navbar navbar-default navbar-fixed-top">
       <div className="container">
@@ -34,41 +38,18 @@ export const Navigation = () => {
         >
           <ul className="nav navbar-nav navbar-right">
             <li>
-              <a href="#features" className="page-scroll">
-                Financiamiento
-              </a>
-            </li>
-            <li>
-              <a href="#about" className="page-scroll">
-                Nosotros
-              </a>
-            </li>
-            <li>
-              <a href="#services" className="page-scroll">
-                Sedes
-              </a>
-            </li>
-            <li>
-              <a href="#portfolio" className="page-scroll">
-                Guía de préstamo
-              </a>
-            </li>
-            <li>
-              <a href="#testimonials" className="page-scroll">
-                Testimoniales
+              <a href="/" className="page-scroll">
+                Inicio
               </a>
             </li>
 
             <li>
-       
-                <button
+              <button
                 className="'btns btn--primary  btn--outline btn--large  page-scroll' "
-                onClick={() => history.push('/login')}
+                onClick= {()=>Onlogout()}
               >
-                Sign-in
+                Log-out
               </button>
-  
-
             </li>
           </ul>
         </div>

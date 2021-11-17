@@ -35,6 +35,7 @@ const Home = () => {
       <Contacto data={landingPageData.Contacto} />
       <Route path="/login" component={LoginModal} />
       <Route path="/register" component={RegisterModal} />
+
     </div>
   );
 };
