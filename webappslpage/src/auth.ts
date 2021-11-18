@@ -7,7 +7,7 @@ export const { useAuth, authFetch, login, logout } =
     getAccessToken: (session) => session.access_token,
     storage: localStorage,
     onUpdateToken: (token) =>
-      fetch('/api/refresh', {
+      fetch('http://localhost:5000/api/refresh', {
         method: 'POST',
         body: token.access_token,
       }).then((r) => r.json()),

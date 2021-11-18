@@ -13,17 +13,15 @@ class Cuenta(db.Model):
 
     def __repr__(self):
         return f"Cuenta('{self.usuario}':'{self.cliente.email}')"
-    
+
     def __id__(self):
         return self.id
-    
+
     def __usuario__(self):
         return f"{self.usuario},{self.cliente.email},{self.balance}, {self.cliente.nombres},{self.cliente.apellidos}"
 
     def __clientInfo__(self):
         return f"{self.cliente.estado_civil},{self.cliente.dueno_vivienda},{self.cliente.num_contacto},{self.cliente.calle},{self.cliente.num_interior},{self.cliente.num_exterior},{self.cliente.colonia},{self.cliente.estado},{self.cliente.educacion},{self.cliente.pais}"
-
-
 
     @classmethod
     def lookup(cls, email):
@@ -64,6 +62,26 @@ class Cliente(db.Model):
     def __repr__(self):
         return f"Cliente('{self.nombres}', '{self.apellidos}')"
 
+    def as_dict(self):
+        return {
+            "id": self.id,
+            "cuenta_id": self.cuenta_id,
+            "nombres": self.nombres,
+            "apellidos": self.apellidos,
+            "estado_civil": self.estado_civil,
+            "dueno_vivienda": self.dueno_vivienda,
+            "email": self.email,
+            "num_contacto": self.num_contacto,
+            "calle": self.calle,
+            "num_interior": self.num_interior,
+            "num_exterior": self.num_exterior,
+            "colonia": self.colonia,
+            "estado": self.estado,
+            "educacion": self.educacion,
+            "fecha_nacimiento": self.fecha_nacimiento,
+            "pais": self.pais
+        }
+
 
 class Solicitud(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -77,3 +95,12 @@ class Solicitud(db.Model):
 
     def __repr__(self):
         return f"Solicitud('{self.id}', '{self.monto}')"
+
+    def as_dict(self):
+        return {
+            "id": self.id,
+            "state": self.estado_proceso,
+            "amount": int(self.monto),
+            "start_date": self.fecha_inicio,
+            "close_date": self.fecha_cierre
+        }
