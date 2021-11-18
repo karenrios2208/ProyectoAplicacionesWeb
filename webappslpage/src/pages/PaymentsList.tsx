@@ -35,7 +35,7 @@ const PaymentsList = (): JSX.Element => {
             r.map((p: any) => ({
               ...p,
               start_date: new Date(p.start_date),
-              close_date: new Date(p.close_date),
+              close_date: p.close_date ? new Date(p.close_date) : '',
             })),
           );
           console.log(r);
@@ -76,10 +76,14 @@ const PaymentsList = (): JSX.Element => {
                 <TableCell>{`$${payment.amount.toFixed(2)}`}</TableCell>
                 <TableCell align="center">{payment.state}</TableCell>
                 <TableCell align="center">
-                  {format(payment.start_date, 'Y-M-d', { locale: esLocale })}
+                  {format(payment.start_date, 'Y-MM-dd', { locale: esLocale })}
                 </TableCell>
                 <TableCell align="center">
-                  {format(payment.close_date, 'Y-M-d', { locale: esLocale })}
+                  {payment.close_date
+                    ? format(payment.close_date, 'Y-MM-dd', {
+                        locale: esLocale,
+                      })
+                    : ''}
                 </TableCell>
               </TableRow>
             ))}
