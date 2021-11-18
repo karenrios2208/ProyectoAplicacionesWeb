@@ -86,7 +86,7 @@ class Cliente(db.Model):
 class Solicitud(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     cuenta_id = db.Column(db.Integer, db.ForeignKey(
-        'cuenta.id', ondelete='CASCADE'), unique=True, nullable=False)
+        'cuenta.id', ondelete='CASCADE'), nullable=False)
     fecha_inicio = db.Column(db.DateTime)
     fecha_cierre = db.Column(db.DateTime)
     monto = db.Column(db.Numeric)
@@ -100,7 +100,7 @@ class Solicitud(db.Model):
         return {
             "id": self.id,
             "state": self.estado_proceso,
-            "amount": int(self.monto),
+            "amount": float(self.monto),
             "start_date": self.fecha_inicio,
             "close_date": self.fecha_cierre
         }
