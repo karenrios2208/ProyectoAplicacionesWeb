@@ -21,35 +21,12 @@ const Details = (): JSX.Element => {
   useEffect(() => {
     const fetchUserp = () =>
       authFetch('http://localhost:5000/api/profileClient')
-        .then((r) => r.text())
+        .then((r) => r.json())
         .then((r) => {
-          setForm({
-            estado_civil: String(r.split(',').at(0)),
-            dueno_vivienda:
-              String('' + r.split(',').at(1)).toLowerCase() === 'true',
-            num_contacto: parseInt('' + r.split(',').at(2)),
-            calle: String(r.split(',').at(3)),
-            num_interior: parseInt('' + r.split(',').at(4)),
-            num_exterior: parseInt('' + r.split(',').at(5)),
-            colonia: String(r.split(',').at(6)),
-            estado: String(r.split(',').at(7)),
-            educacion: String(r.split(',').at(8)),
-            pais: String(r.split(',').at(9)),
-          });
-        })
-        .catch((_) => {
-          setForm({
-            estado_civil: 'Soltero',
-            dueno_vivienda: false,
-            num_contacto: 0,
-            calle: '',
-            num_interior: 0,
-            num_exterior: 0,
-            colonia: '',
-            estado: '',
-            educacion: '',
-            pais: '',
-          });
+          const updates = Object.fromEntries(
+            Object.entries(r).filter((e) => e[1] !== null),
+          );
+          setForm((form) => ({ ...form, ...updates }));
         });
     fetchUserp();
   }, []);
