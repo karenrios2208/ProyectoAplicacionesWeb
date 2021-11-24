@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { logout } from '../auth';
+import SwipeableTemporaryDrawer from './sidebar';
 
 
 export const NavigationUser = () => {
@@ -13,6 +14,7 @@ export const NavigationUser = () => {
   }
   return (
     <nav id="menu" className="navbar navbar-default navbar-fixed-top">
+      <SwipeableTemporaryDrawer/>
       <div className="container">
         <div className="navbar-header">
           <button
@@ -26,6 +28,7 @@ export const NavigationUser = () => {
             <span className="icon-bar"></span>{' '}
             <span className="icon-bar"></span>{' '}
             <span className="icon-bar"></span>{' '}
+
           </button>
           <a className="navbar-brand page-scroll" href="#page-top">
             SRCapital

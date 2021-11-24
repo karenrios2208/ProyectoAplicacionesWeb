@@ -11,31 +11,23 @@ const User = (): JSX.Element => {
     apellidos: '',
   });
 
+
+
+
   useEffect(() => {
     const fetchUserp = () =>
       authFetch('http://localhost:5000/api/profile')
-        .then((r) => r.text())
+        .then((r) => r.json())
         .then((r) => {
-          setusr({
-            username: '' + r.split(',').at(0),
-            email: '' + r.split(',').at(1),
-            balance: '' + r.split(',').at(2),
-            nombre: '' + r.split(',').at(3),
-            apellidos: '' + r.split(',').at(4),
-          });
-        })
-        .catch((_) => {
-          setusr({
-            username: 'error',
-            email: 'error',
-            balance: 'error',
-            nombre: 'error',
-            apellidos: 'error',
-          });
+          const updates = Object.fromEntries(
+            Object.entries(r).filter((e) => e[1] !== null),
+          );
+          setusr((form) => ({ ...form, ...updates }));
         });
     fetchUserp();
   }, []);
 
+ 
   console.log(usr);
   return (
     <div style={{ margin: '0 auto', width: '100%' }} id="user">

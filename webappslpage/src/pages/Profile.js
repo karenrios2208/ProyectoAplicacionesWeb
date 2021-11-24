@@ -2,9 +2,11 @@ import SmoothScroll from 'smooth-scroll';
 import './Home.css';
 import UpdateClient from '../components/modifyclient';
 import User from '../components/user';
-import Details from '../components/detailsUser';
 import { NavigationUser } from '../components/navigationUser';
 import { Route } from 'react-router-dom';
+import ResponsiveDrawer from '../components/sidebar';
+import SwipeableTemporaryDrawer from '../components/sidebar';
+import Details from './detailsUser';
 
 export const scroll = new SmoothScroll('a[href*="#"]', {
   speed: 1000,
@@ -15,10 +17,9 @@ const profile = () => {
 
   return (
     <div>
-      <NavigationUser />
+      <NavigationUser/>
       <User />
-      <Details />
-      <Route path="/updateC" component={UpdateClient}/>
+      <Route path="/updateC" component={Details}/>
 
     </div>
   );

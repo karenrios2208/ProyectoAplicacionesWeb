@@ -1,7 +1,8 @@
 import { Button, Card, CardContent, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { authFetch } from '../auth';
-import { useHistory } from 'react-router-dom';
+import { Route, useHistory } from 'react-router-dom';
+import UpdateClient from '../components/modifyclient';
 
 const Details = (): JSX.Element => {
   const [form, setForm] = useState({
@@ -16,8 +17,8 @@ const Details = (): JSX.Element => {
     educacion: '',
     pais: '',
   });
+  
   const history = useHistory();
-
   useEffect(() => {
     const fetchUserp = () =>
       authFetch('http://localhost:5000/api/profileClient')
@@ -32,7 +33,9 @@ const Details = (): JSX.Element => {
   }, []);
 
   return (
+    
     <div style={{ margin: '-8% auto', width: '100%' }} id="user">
+
       <Card sx={{ minWidth: 275, mx: '5%' }}>
         <CardContent>
           <Typography variant="h5" component="h2">
@@ -82,6 +85,7 @@ const Details = (): JSX.Element => {
       >
         Modifica tus datos
       </Button>
+      <Route path="/updateC" component={UpdateClient}/>
     </div>
   );
 };

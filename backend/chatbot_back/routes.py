@@ -47,7 +47,7 @@ def login():
 @app.route('/api/profile')
 @auth_required
 def profile():
-    return current_user().__usuario__(), 200
+    return jsonify(current_user().__usuario__()), 200
 
 
 @app.route('/api/profileClient')

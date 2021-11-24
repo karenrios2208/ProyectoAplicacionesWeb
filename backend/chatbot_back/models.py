@@ -17,8 +17,18 @@ class Cuenta(db.Model):
     def __id__(self):
         return self.id
 
+   ## def __usuario__(self):
+      ##  return f"{self.usuario},{self.cliente.email},{self.balance}, {self.cliente.nombres},{self.cliente.apellidos}"
+
     def __usuario__(self):
-        return f"{self.usuario},{self.cliente.email},{self.balance}, {self.cliente.nombres},{self.cliente.apellidos}"
+        return {
+            "username":self.usuario,
+            "email": self.cliente.email,
+            "balance": self.balance,
+            "nombre": self.cliente.nombres,
+            "apellidos":self.cliente.apellidos
+        }
+
 
     def __clientInfo__(self):
         return f"{self.cliente.estado_civil},{self.cliente.dueno_vivienda},{self.cliente.num_contacto},{self.cliente.calle},{self.cliente.num_interior},{self.cliente.num_exterior},{self.cliente.colonia},{self.cliente.estado},{self.cliente.educacion},{self.cliente.pais}"
@@ -81,6 +91,7 @@ class Cliente(db.Model):
             "fecha_nacimiento": self.fecha_nacimiento,
             "pais": self.pais
         }
+
 
 
 class Solicitud(db.Model):

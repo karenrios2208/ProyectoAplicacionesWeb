@@ -56,5 +56,8 @@
     "semi": true,
     "singleQuote": true,
     "trailingComma": "all"
+  },
+  "devDependencies": {
+    "@types/smooth-scroll": "^16.1.1"
   }
 }
