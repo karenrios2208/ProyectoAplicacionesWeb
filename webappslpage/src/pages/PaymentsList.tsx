@@ -46,7 +46,7 @@ const PaymentsList = (): JSX.Element => {
   if (loading) return <div>Cargando</div>;
   if (payments.length === 0)
     return (
-      <div>
+      <div style={{ marginTop: '100px' }}>
         <h2>Aún no has creado anticipos de salario</h2>
       </div>
     );

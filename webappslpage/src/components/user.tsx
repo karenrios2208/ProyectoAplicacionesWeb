@@ -11,9 +11,6 @@ const User = (): JSX.Element => {
     apellidos: '',
   });
 
-
-
-
   useEffect(() => {
     const fetchUserp = () =>
       authFetch('http://localhost:5000/api/profile')
@@ -27,16 +24,17 @@ const User = (): JSX.Element => {
     fetchUserp();
   }, []);
 
- 
   console.log(usr);
   return (
-    <div style={{ margin: '0 auto', width: '100%' }} id="user">
+    <div
+      style={{ margin: '0 auto', width: '100%', height: 'calc(100vh - 100px)' }}
+      id="user"
+    >
       <Typography variant="h2" component="h1" align="center">
         Bienvenido {usr.username}
       </Typography>
       <br />
       <Card sx={{ minWidth: 275, mb: '8%', mx: '5%' }}>
-        0
         <CardContent>
           <Typography variant="h5" component="h2">
             Balance
@@ -53,7 +51,7 @@ const User = (): JSX.Element => {
             Datos Cuenta
           </Typography>
           <br />
-          <Typography variant="body1" component="h3">
+          <Typography variant="body1">
             <b>&emsp; Nombre:</b> {usr.nombre}
             <br />
             <b>&emsp; Apellidos:</b> {usr.apellidos}

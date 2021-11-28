@@ -3,17 +3,13 @@ import Box from '@mui/material/Box';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
+import MenuIcon from '@mui/icons-material/Menu';
 import ListItemText from '@mui/material/ListItemText';
-import { useHistory } from 'react-router';
-
 
 export default function SwipeableTemporaryDrawer() {
-   const history = useHistory();
   const [state, setState] = React.useState({
-    opciones: false,
+    left: false,
   });
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -36,8 +32,12 @@ export default function SwipeableTemporaryDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {[['Detalles Cuenta','/'], ['Detalles cliente','/details'], ['Tabla anticipos','/payments']].map((text,index) => (
-          <ListItem button key={text}  component="a" href={text.at(1)}>
+        {[
+          ['Detalles de la cuenta', '/profile'],
+          ['Datos personales', '/details'],
+          ['Tabla anticipos', '/payments'],
+        ].map((text, index) => (
+          <ListItem button key={text} component="a" href={text.at(1)}>
             <ListItemText id="userN2" primary={text.at(0)} />
           </ListItem>
         ))}
@@ -49,7 +49,9 @@ export default function SwipeableTemporaryDrawer() {
     <div>
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button id="userN" onClick={toggleDrawer(anchor, true)}>Más acciones</Button>
+          <Button id="userN" onClick={toggleDrawer(anchor, true)}>
+            <MenuIcon />
+          </Button>
           <SwipeableDrawer
             anchor={anchor}
             open={state[anchor]}

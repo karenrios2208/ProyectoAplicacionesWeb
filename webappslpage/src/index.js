@@ -7,8 +7,6 @@ import Home from './pages/Home';
 import BotConversation from './pages/BotConversation';
 import Account from './pages/Account';
 import profile from './pages/Profile';
-import PaymentsList from './pages/PaymentsList';
-import Details from './pages/detailsUser';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -21,8 +19,8 @@ ReactDOM.render(
         <Route path="/updateC" component={profile} />
         <Route path="/account" component={Account} />
         <Route path="/profile" component={profile} />
-        <Route path="/payments" component={PaymentsList} />
-        <Route path="/details" component={Details} />
+        <Route path="/details" component={profile} />
+        <Route path="/payments" component={profile} />
         <Route path="/bot" component={BotConversation} />
       </Switch>
     </BrowserRouter>

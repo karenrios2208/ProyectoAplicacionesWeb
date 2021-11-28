@@ -2,7 +2,7 @@ import { Button, Card, CardContent, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { authFetch } from '../auth';
 import { Route, useHistory } from 'react-router-dom';
-import UpdateClient from '../components/modifyclient';
+import UpdateClient from './modifyclient';
 
 const Details = (): JSX.Element => {
   const [form, setForm] = useState({
@@ -17,7 +17,7 @@ const Details = (): JSX.Element => {
     educacion: '',
     pais: '',
   });
-  
+
   const history = useHistory();
   useEffect(() => {
     const fetchUserp = () =>
@@ -33,16 +33,17 @@ const Details = (): JSX.Element => {
   }, []);
 
   return (
-    
-    <div style={{ margin: '-8% auto', width: '100%' }} id="user">
-
+    <div
+      style={{ margin: '0 auto', width: '100%', height: 'calc(100vh - 100px)' }}
+      id="user"
+    >
       <Card sx={{ minWidth: 275, mx: '5%' }}>
         <CardContent>
           <Typography variant="h5" component="h2">
             Detalles de la cuenta
           </Typography>
           <br />
-          <Typography variant="body1" component="h3">
+          <div>
             <b>&emsp; Estado Civil:</b> {form.estado_civil}
             <br />
             {form.dueno_vivienda ? (
@@ -69,7 +70,7 @@ const Details = (): JSX.Element => {
             <b>&emsp; País:</b> {form.pais}
             <br />
             <b>&emsp; Nivel de Educación:</b> {form.educacion}
-          </Typography>
+          </div>
         </CardContent>
       </Card>
 
@@ -85,7 +86,7 @@ const Details = (): JSX.Element => {
       >
         Modifica tus datos
       </Button>
-      <Route path="/updateC" component={UpdateClient}/>
+      <Route path="/updateC" component={UpdateClient} />
     </div>
   );
 };
