@@ -4,6 +4,7 @@
   "dependencies": {
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
+    "@kommunicate/kommunicate-chatbot-plugin": "^0.0.5",
     "@mui/icons-material": "^5.2.0",
     "@mui/lab": "^5.0.0-alpha.53",
     "@mui/material": "^5.0.6",
@@ -20,6 +21,7 @@
     "emailjs-com": "^2.6.4",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-native-kommunicate-chat": "^1.6.1",
     "react-router-dom": "^5.3.0",
     "react-scripts": "^4.0.2",
     "react-token-auth": "^2.2.0",
