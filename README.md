@@ -3,6 +3,7 @@
 YO YO YO!
 
 Para instalar el modulo de Kommunicate y poder usar el chatbot debes hacer: npm install @kommunicate/kommunicate-chatbot-plugin --force
+
 El --force es necesario :^)
 
 ### Back-End:
