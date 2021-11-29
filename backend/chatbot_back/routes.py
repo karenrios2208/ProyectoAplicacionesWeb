@@ -1,7 +1,7 @@
 from flask import flash, redirect, request, jsonify
 from flask_praetorian import auth_required, current_user
 from chatbot_back import app, db, bcrypt, guard
-from chatbot_back.forms import Registration, Login, UpdateClient
+from chatbot_back.forms import Registration, Login, UpdateClient, UpdateBalance
 from chatbot_back.models import *
 
 
@@ -91,6 +91,29 @@ def updateClient():
         return jsonify({"status": 200}), 200
 
     return jsonify({"status": 400, "errors": form.errors}), 200
+
+
+@app.route('/api/updateBalance', methods=['POST'])
+@auth_required
+def updateBalance():
+    json = request.get_json()
+    form = UpdateBalance.from_json(json)
+    print(json, form.data, form.validate())
+
+    if form.validate_on_submit():
+        c_id = current_user().__id__()
+        updates = {
+            "balance": form.balance.data
+        }
+
+        Cuenta.query.filter_by(id=c_id).update(updates)
+        db.session.commit()
+
+        flash(f'Account updated!', 'success')
+        return jsonify({"status": 200}), 200
+
+    return jsonify({"status": 400, "errors": form.errors}), 200
+
 
 
 @app.route('/api/account')
