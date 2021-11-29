@@ -1,7 +1,8 @@
 import { Card, CardContent, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { authFetch } from '../auth';
-
+import Kommunicate from '@kommunicate/kommunicate-chatbot-plugin';
+declare const window: any;
 const User = (): JSX.Element => {
   const [usr, setusr] = useState({
     username: '',
@@ -10,6 +11,24 @@ const User = (): JSX.Element => {
     nombre: '',
     apellidos: '',
   });
+
+  var blnc = {balance: 15000} ;
+    const onClientUpdate = async () => {
+      const res = await authFetch('http://localhost:5000/api/updateBalance', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+
+        body: JSON.stringify(blnc),
+      });
+      const resB = await res.json();
+
+      // TODO: Show a toast to let the user know about a server error
+      if (resB.status !== 200){console.log("uwu")};
+
+
+    };
 
   useEffect(() => {
     const fetchUserp = () =>
@@ -24,7 +43,48 @@ const User = (): JSX.Element => {
     fetchUserp();
   }, []);
 
-  console.log(usr);
+  Kommunicate.init("37023b4d4f03c87771a4422862fc593cd" ,{"popupWidget":true,"automaticChatOpenOnNavigation":false,"onInit": function(){
+    var chatContext = {
+    "key1":"value1",
+    "key2":usr.balance
+    }
+    window.Kommunicate.updateChatContext(chatContext);
+    var events = {
+
+          'onMessageReceived': function (resp) {
+                    console.log("wwwwwwwwwwwwwwwwww",usr.username);
+                    if (resp["message"]["message"].includes("Listo! Tu prestamo de nomia fue completado. Deberías tenerlo disponible en cualquier momento.")) {
+                      // reqbal es el balance despues del prestamo, puedes hacer (usr.balance - reqbal) para obtener la cantidad solicitada.
+                      var reqbal = Number(resp["message"]["message"].match(/\d+/))
+                      blnc.balance = reqbal
+                      // Aqui van el post para la tabla "solicitud" con la información del prestamo
+                      onClientUpdate()
+                    }
+                    else if (resp["message"]["message"].includes("Listo! Tu prestamo personal fue completado. Deberías tenerlo disponible en cualquier momento.")) {
+                      // reqbal es el balance despues del prestamo, puedes hacer (usr.balance - reqbal) para obtener la cantidad solicitada.
+                      var reqbal = Number(resp["message"]["message"].match(/\d+/))
+                      blnc.balance = reqbal
+                      // Aqui van el post para la tabla "solicitud" con la información del prestamo
+                      onClientUpdate()
+                    }
+
+          },
+          'onMessageSent': function (resp) {
+            console.log("wwwwwwwwwwwwwwwwww",usr.username);
+          console.log(resp);
+          //called when the message is sent
+        },
+          'onChatWidgetOpen': function (resp) {
+          console.log(resp);
+          //called when chat widget gets open
+          }
+      };
+     window.Kommunicate.subscribeToEvents(events);
+    }
+  })
+
+
+console.log(usr);
   return (
     <div
       style={{ margin: '0 auto', width: '100%', height: 'calc(100vh - 100px)' }}
