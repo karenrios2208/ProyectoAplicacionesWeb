@@ -7,28 +7,48 @@ const User = (): JSX.Element => {
   const [usr, setusr] = useState({
     username: '',
     email: '',
-    balance: '',
+    balance: 0,
     nombre: '',
     apellidos: '',
   });
 
-  var blnc = {balance: 15000} ;
-    const onClientUpdate = async () => {
-      const res = await authFetch('http://localhost:5000/api/updateBalance', {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
+  var blnc = { balance: 15000 };
 
-        body: JSON.stringify(blnc),
-      });
-      const resB = await res.json();
+  const onClientUpdate = async () => {
+    const res = await authFetch('http://localhost:5000/api/updateBalance', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
 
-      // TODO: Show a toast to let the user know about a server error
-      if (resB.status !== 200){console.log("uwu")};
+      body: JSON.stringify(blnc),
+    });
+    const resB = await res.json();
 
+    // TODO: Show a toast to let the user know about a server error
+    if (resB.status !== 200) {
+      console.log('uwu');
+    }
+  };
 
-    };
+  const createPayment = async (prestamo) => {
+    const res = await authFetch('http://localhost:5000/api/createPayment', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        monto: prestamo,
+      }),
+    });
+
+    const resB = await res.json();
+
+    // TODO: Show a toast to let the user know about a server error
+    if (resB.status !== 200) {
+      console.log('error');
+    }
+  };
 
   useEffect(() => {
     const fetchUserp = () =>
@@ -43,48 +63,58 @@ const User = (): JSX.Element => {
     fetchUserp();
   }, []);
 
-  Kommunicate.init("37023b4d4f03c87771a4422862fc593cd" ,{"popupWidget":true,"automaticChatOpenOnNavigation":false,"onInit": function(){
-    var chatContext = {
-    "key1":"value1",
-    "key2":usr.balance
-    }
-    window.Kommunicate.updateChatContext(chatContext);
-    var events = {
+  Kommunicate.init('37023b4d4f03c87771a4422862fc593cd', {
+    popupWidget: true,
+    automaticChatOpenOnNavigation: false,
+    onInit: function () {
+      var chatContext = {
+        key1: 'value1',
+        key2: usr.balance,
+      };
+      window.Kommunicate.updateChatContext(chatContext);
+      var events = {
+        onMessageReceived: function (resp) {
+          console.log('wwwwwwwwwwwwwwwwww', usr.username);
+          if (
+            resp['message']['message'].includes(
+              'Listo! Tu prestamo de nomia fue completado.',
+            )
+          ) {
+            // reqbal es el balance despues del prestamo, puedes hacer (usr.balance - reqbal) para obtener la cantidad solicitada.
+            var reqbal = Number(resp['message']['message'].match(/\d+/));
+            blnc.balance = reqbal;
+            // Aqui van el post para la tabla "solicitud" con la información del prestamo
+            createPayment(usr.balance - reqbal);
+            onClientUpdate();
 
-          'onMessageReceived': function (resp) {
-                    console.log("wwwwwwwwwwwwwwwwww",usr.username);
-                    if (resp["message"]["message"].includes("Listo! Tu prestamo de nomia fue completado. Deberías tenerlo disponible en cualquier momento.")) {
-                      // reqbal es el balance despues del prestamo, puedes hacer (usr.balance - reqbal) para obtener la cantidad solicitada.
-                      var reqbal = Number(resp["message"]["message"].match(/\d+/))
-                      blnc.balance = reqbal
-                      // Aqui van el post para la tabla "solicitud" con la información del prestamo
-                      onClientUpdate()
-                    }
-                    else if (resp["message"]["message"].includes("Listo! Tu prestamo personal fue completado. Deberías tenerlo disponible en cualquier momento.")) {
-                      // reqbal es el balance despues del prestamo, puedes hacer (usr.balance - reqbal) para obtener la cantidad solicitada.
-                      var reqbal = Number(resp["message"]["message"].match(/\d+/))
-                      blnc.balance = reqbal
-                      // Aqui van el post para la tabla "solicitud" con la información del prestamo
-                      onClientUpdate()
-                    }
-
-          },
-          'onMessageSent': function (resp) {
-            console.log("wwwwwwwwwwwwwwwwww",usr.username);
+          } else if (
+            resp['message']['message'].includes(
+              'Listo! Tu prestamo personal fue completado.',
+            )
+          ) {
+            // reqbal es el balance despues del prestamo, puedes hacer (usr.balance - reqbal) para obtener la cantidad solicitada.
+            var reqbal = Number(resp['message']['message'].match(/\d+/));
+            blnc.balance = reqbal;
+            // Aqui van el post para la tabla "solicitud" con la información del prestamo
+            createPayment(usr.balance - reqbal);
+            onClientUpdate();
+          }
+        },
+        onMessageSent: function (resp) {
+          console.log('wwwwwwwwwwwwwwwwww', usr.username);
           console.log(resp);
           //called when the message is sent
         },
-          'onChatWidgetOpen': function (resp) {
+        onChatWidgetOpen: function (resp) {
           console.log(resp);
           //called when chat widget gets open
-          }
+        },
       };
-     window.Kommunicate.subscribeToEvents(events);
-    }
-  })
+      window.Kommunicate.subscribeToEvents(events);
+    },
+  });
 
-
-console.log(usr);
+  console.log(usr);
   return (
     <div
       style={{ margin: '0 auto', width: '100%', height: 'calc(100vh - 100px)' }}

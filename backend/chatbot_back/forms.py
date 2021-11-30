@@ -53,3 +53,8 @@ class UpdateBalance(FlaskForm):
     class Meta:
         csrf = False
     balance = IntegerField('balance', validators=[DataRequired()])
+
+class CreatePayment(FlaskForm):
+    class Meta:
+        csrf = False
+    monto = IntegerField('monto', validators=[DataRequired()])
