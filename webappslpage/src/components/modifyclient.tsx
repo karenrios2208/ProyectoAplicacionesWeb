@@ -74,7 +74,7 @@ const UpdateClient = (): JSX.Element => {
     setForm({ ...form, [e.target.name]: e.target.checked });
   };
 
-  const close = () => history.push('/profile');
+  const close = () => history.push('/details');
   const onClientUpdate = async () => {
     const res = await authFetch('http://localhost:5000/api/updateClient', {
       method: 'POST',

@@ -73,7 +73,7 @@ const Details = (): JSX.Element => {
           </div>
         </CardContent>
       </Card>
-
+      <Route path="/updateC" component={UpdateClient} />
       <div style={{ margin: '2% auto auto', width: '100%' }}></div>
       <Button
         sx={{ ml: '2%' }}
@@ -86,7 +86,6 @@ const Details = (): JSX.Element => {
       >
         Modifica tus datos
       </Button>
-      <Route path="/updateC" component={UpdateClient} />
     </div>
   );
 };

@@ -23,6 +23,8 @@ const profile = () => {
       <Route path="/profile" component={User} />
       <Route path="/details" component={Details} />
       <Route path="/payments" component={PaymentsList} />
+      <Route path="/updateC" component={Details} />
+      
     </div>
   );
 };
