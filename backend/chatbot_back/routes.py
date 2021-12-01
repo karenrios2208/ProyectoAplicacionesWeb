@@ -1,8 +1,9 @@
 from flask import flash, redirect, request, jsonify
 from flask_praetorian import auth_required, current_user
 from chatbot_back import app, db, bcrypt, guard
-from chatbot_back.forms import Registration, Login, UpdateClient
+from chatbot_back.forms import Registration, Login, UpdateClient, UpdateBalance, CreatePayment
 from chatbot_back.models import *
+from datetime import date
 
 
 @app.route('/api/register', methods=['POST'])
@@ -47,7 +48,7 @@ def login():
 @app.route('/api/profile')
 @auth_required
 def profile():
-    return current_user().__usuario__(), 200
+    return jsonify(current_user().__usuario__()), 200
 
 
 @app.route('/api/profileClient')
@@ -93,6 +94,44 @@ def updateClient():
     return jsonify({"status": 400, "errors": form.errors}), 200
 
 
+@app.route('/api/updateBalance', methods=['POST'])
+@auth_required
+def updateBalance():
+    json = request.get_json()
+    form = UpdateBalance.from_json(json)
+    print(json, form.data, form.validate())
+
+    if form.validate_on_submit():
+        c_id = current_user().__id__()
+        updates = {
+            "balance": form.balance.data
+        }
+
+
+        Cuenta.query.filter_by(id=c_id).update(updates)
+        db.session.commit()
+
+        flash(f'Account updated!', 'success')
+        return jsonify({"status": 200}), 200
+
+    return jsonify({"status": 400, "errors": form.errors}), 200
+
+@app.route('/api/createPayment', methods=['POST'])
+@auth_required
+def createPayment():
+    json = request.get_json()
+    form = CreatePayment.from_json(json)
+    print(json, form.data, form.validate())
+    if form.validate_on_submit():
+        c_id = current_user().__id__()
+        solicitud = Solicitud(cuenta_id=c_id, fecha_inicio=date.today(),fecha_cierre=date.today(), monto=form.monto.data, estado_proceso='Aceptado')
+        db.session.add(solicitud)
+        db.session.commit()
+        flash(f'Payment created!', 'success')
+        return jsonify({"status": 200}), 200
+    return jsonify({"status": 400, "errors": form.errors}), 200
+
+
 @app.route('/api/account')
 @auth_required
 def account():
@@ -110,3 +149,6 @@ def getPayments():
         payments.append(paymentRow.as_dict())
 
     return jsonify(payments), 200
+
+
+

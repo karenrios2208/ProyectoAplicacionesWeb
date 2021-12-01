@@ -1,5 +1,17 @@
 # Proyecto de Aplicaciones Web
 ## Requerimientos:
+YO YO YO!
+
+Para instalar el modulo de Kommunicate y poder usar el chatbot debes hacer: 
+
+npm install @kommunicate/kommunicate-chatbot-plugin --force
+
+o junto a todas las demás dependencias (ya está agregado a las dependencias):
+
+npm install --force
+
+#El --force es necesario :^)
+
 ### Back-End:
 Los siguientes programas deben de estar instalados en el servidor donde se correrá el backend:
 - PostgreSQL

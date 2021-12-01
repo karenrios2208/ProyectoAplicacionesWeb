@@ -55,6 +55,7 @@ const UpdateClient = (): JSX.Element => {
       authFetch('http://localhost:5000/api/profileClient')
         .then((r) => r.json())
         .then((r) => {
+          console.log(r);
           const updates = Object.fromEntries(
             Object.entries(r).filter((e) => e[1] !== null),
           );
@@ -63,7 +64,7 @@ const UpdateClient = (): JSX.Element => {
     fetchUserp();
   }, []);
 
-  console.log(form);
+ 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -73,7 +74,7 @@ const UpdateClient = (): JSX.Element => {
     setForm({ ...form, [e.target.name]: e.target.checked });
   };
 
-  const close = () => history.push('/profile');
+  const close = () => history.push('/details');
   const onClientUpdate = async () => {
     const res = await authFetch('http://localhost:5000/api/updateClient', {
       method: 'POST',
@@ -89,7 +90,7 @@ const UpdateClient = (): JSX.Element => {
     // TODO: Show a toast to let the user know about a server error
     if (resB.status !== 200) setExcep('Unknown server error');
 
-    history.push('/profile');
+    history.push('/details');
   };
 
   return (

@@ -376,6 +376,7 @@ header .intro-text {
   background:  linear-gradient(to right, #5ca9fb 0%, #27187e 100%);
   color: #333;
     font-family: "Raleway", sans-serif;
+  height:fit-content;
 }
 
 #user div {
@@ -398,6 +399,17 @@ header .intro-text {
 #user h3{
   font-weight:100;
   font-family: "Open Sans", sans-serif;
+}
+
+#userN {
+  font-weight:800;
+  font-family: "Open Sans", sans-serif;
+  color: #fff;
+}
+#userN2{
+  font-weight:800;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  color: #27187e;
 }
 
 #services .section-title h2::after {

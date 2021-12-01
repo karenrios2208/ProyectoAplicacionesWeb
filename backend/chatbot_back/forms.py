@@ -21,6 +21,7 @@ class Registration(FlaskForm):
                                      DataRequired(), EqualTo('password')])
 
 
+
 class Login(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -36,7 +37,7 @@ class Login(FlaskForm):
 class UpdateClient(FlaskForm):
     class Meta:
         csrf = False
- 
+
     estado_civil = StringField('Estado Civil', validators=[DataRequired()])
     dueno_vivienda = BooleanField('¿Eres dueño de vivienda?')
     num_contacto = IntegerField('Número de contacto', validators=[DataRequired()])
@@ -47,3 +48,13 @@ class UpdateClient(FlaskForm):
     estado = StringField('Estado')
     educacion = StringField('Educación')
     pais = StringField('Pais')
+
+class UpdateBalance(FlaskForm):
+    class Meta:
+        csrf = False
+    balance = IntegerField('balance', validators=[DataRequired()])
+
+class CreatePayment(FlaskForm):
+    class Meta:
+        csrf = False
+    monto = IntegerField('monto', validators=[DataRequired()])
