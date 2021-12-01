@@ -12,6 +12,7 @@ import esLocale from 'date-fns/locale/es';
 import { format } from 'date-fns';
 
 import { authFetch } from '../auth';
+import { API_SERVER_URL } from '../config';
 
 export interface Payment {
   id: number;
@@ -27,7 +28,7 @@ const PaymentsList = (): JSX.Element => {
 
   useEffect(() => {
     const fetchPayments = () =>
-      authFetch('http://localhost:5000/api/payments')
+      authFetch(`${API_SERVER_URL}/payments`)
         .then((r) => r.json())
         .then((r) => {
           setLoading(false);

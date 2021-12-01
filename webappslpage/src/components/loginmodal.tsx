@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 
 import { login } from '../auth';
+import { API_SERVER_URL } from '../config';
 
 const LoginModal = (): JSX.Element => {
   const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ const LoginModal = (): JSX.Element => {
 
   const close = () => history.push('/');
   const onLogin = () =>
-    fetch('http://localhost:5000/api/login', {
+    fetch(`${API_SERVER_URL}/login`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',

@@ -1,13 +1,16 @@
+import os
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_praetorian import Praetorian
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path="", static_folder="../static")
 # App settings
 app.config['SECRET_KEY'] = '335f16b52741f2f8525920b30795455c'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1148@localhost:5432/chatbot'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
+    'DATABASE_URL', 'postgresql://postgres:1148@localhost:5432/chatbot')
 # Instantiate extensions
 db = SQLAlchemy(app)
 db.create_all()

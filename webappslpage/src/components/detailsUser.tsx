@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { authFetch } from '../auth';
 import { Route, useHistory } from 'react-router-dom';
 import UpdateClient from './modifyclient';
+import { API_SERVER_URL } from '../config';
 
 const Details = (): JSX.Element => {
   const [form, setForm] = useState({
@@ -21,7 +22,7 @@ const Details = (): JSX.Element => {
   const history = useHistory();
   useEffect(() => {
     const fetchUserp = () =>
-      authFetch('http://localhost:5000/api/profileClient')
+      authFetch(`${API_SERVER_URL}/profileClient`)
         .then((r) => r.json())
         .then((r) => {
           const updates = Object.fromEntries(

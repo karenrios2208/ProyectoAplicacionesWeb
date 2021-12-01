@@ -13,7 +13,7 @@ import { DatePicker, LocalizationProvider } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import esLocale from 'date-fns/locale/es';
 import { format } from 'date-fns';
-
+import { API_SERVER_URL } from '../config';
 
 const RegisterModal = (): JSX.Element => {
   const [form, setForm] = useState({
@@ -152,7 +152,7 @@ const RegisterModal = (): JSX.Element => {
   const close = () => history.push('/');
   const onRegister = async () => {
     if (!handleValidation()) return;
-    const res = await fetch('http://localhost:5000/api/register', {
+    const res = await fetch(`${API_SERVER_URL}/register`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',

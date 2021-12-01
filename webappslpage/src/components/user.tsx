@@ -2,6 +2,7 @@ import { Card, CardContent, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { authFetch } from '../auth';
 import Kommunicate from '@kommunicate/kommunicate-chatbot-plugin';
+import { API_SERVER_URL } from '../config';
 declare const window: any;
 const User = (): JSX.Element => {
   const [usr, setusr] = useState({
@@ -15,7 +16,7 @@ const User = (): JSX.Element => {
   var blnc = { balance: 15000 };
 
   const onClientUpdate = async () => {
-    const res = await authFetch('http://localhost:5000/api/updateBalance', {
+    const res = await authFetch(`${API_SERVER_URL}/updateBalance`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -32,7 +33,7 @@ const User = (): JSX.Element => {
   };
 
   const createPayment = async (prestamo) => {
-    const res = await authFetch('http://localhost:5000/api/createPayment', {
+    const res = await authFetch(`${API_SERVER_URL}/createPayment`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -52,7 +53,7 @@ const User = (): JSX.Element => {
 
   useEffect(() => {
     const fetchUserp = () =>
-      authFetch('http://localhost:5000/api/profile')
+      authFetch(`${API_SERVER_URL}/profile`)
         .then((r) => r.json())
         .then((r) => {
           const updates = Object.fromEntries(
@@ -86,7 +87,6 @@ const User = (): JSX.Element => {
             // Aqui van el post para la tabla "solicitud" con la información del prestamo
             createPayment(usr.balance - reqbal);
             onClientUpdate();
-
           } else if (
             resp['message']['message'].includes(
               'Listo! Tu prestamo personal fue completado.',

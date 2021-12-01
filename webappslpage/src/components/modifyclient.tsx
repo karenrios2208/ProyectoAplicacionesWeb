@@ -13,6 +13,7 @@ import {
   MenuItem,
 } from '@mui/material';
 import { authFetch } from '../auth';
+import { API_SERVER_URL } from '../config';
 
 const UpdateClient = (): JSX.Element => {
   const [excep, setExcep] = useState('');
@@ -52,7 +53,7 @@ const UpdateClient = (): JSX.Element => {
 
   useEffect(() => {
     const fetchUserp = () =>
-      authFetch('http://localhost:5000/api/profileClient')
+      authFetch(`${API_SERVER_URL}/profileClient`)
         .then((r) => r.json())
         .then((r) => {
           console.log(r);
@@ -64,8 +65,6 @@ const UpdateClient = (): JSX.Element => {
     fetchUserp();
   }, []);
 
- 
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -76,7 +75,7 @@ const UpdateClient = (): JSX.Element => {
 
   const close = () => history.push('/details');
   const onClientUpdate = async () => {
-    const res = await authFetch('http://localhost:5000/api/updateClient', {
+    const res = await authFetch(`${API_SERVER_URL}/updateClient`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',

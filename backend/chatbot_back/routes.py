@@ -107,7 +107,6 @@ def updateBalance():
             "balance": form.balance.data
         }
 
-
         Cuenta.query.filter_by(id=c_id).update(updates)
         db.session.commit()
 
@@ -115,6 +114,7 @@ def updateBalance():
         return jsonify({"status": 200}), 200
 
     return jsonify({"status": 400, "errors": form.errors}), 200
+
 
 @app.route('/api/createPayment', methods=['POST'])
 @auth_required
@@ -124,7 +124,9 @@ def createPayment():
     print(json, form.data, form.validate())
     if form.validate_on_submit():
         c_id = current_user().__id__()
-        solicitud = Solicitud(cuenta_id=c_id, fecha_inicio=date.today(),fecha_cierre=date.today(), monto=form.monto.data, estado_proceso='Aceptado')
+        solicitud = Solicitud(cuenta_id=c_id, fecha_inicio=date.today(),
+                              fecha_cierre=date.today(), monto=form.monto.data,
+                              estado_proceso='Aceptado')
         db.session.add(solicitud)
         db.session.commit()
         flash(f'Payment created!', 'success')
@@ -151,4 +153,6 @@ def getPayments():
     return jsonify(payments), 200
 
 
-
+@app.errorhandler(404)
+def frontend(_):
+    return app.send_static_file("index.html")
