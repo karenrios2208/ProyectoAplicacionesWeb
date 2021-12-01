@@ -1,0 +1,9 @@
+**/__pycache__
+backend/bin
+backend/include
+backend/lib
+backend/lib64
+backend/static
+backend/pyvenv.cfg
+webappslpage/build
+webappslpage/node_modules
