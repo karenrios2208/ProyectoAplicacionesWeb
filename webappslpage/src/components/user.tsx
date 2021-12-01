@@ -78,7 +78,7 @@ const User = (): JSX.Element => {
           console.log('wwwwwwwwwwwwwwwwww', usr.username);
           if (
             resp['message']['message'].includes(
-              'Listo! Tu préstamo de nómina fue completado.',
+              'Listo! Tu prestamo de nomina fue completado.',
             )
           ) {
             // reqbal es el balance despues del prestamo, puedes hacer (usr.balance - reqbal) para obtener la cantidad solicitada.
@@ -89,7 +89,7 @@ const User = (): JSX.Element => {
             onClientUpdate();
           } else if (
             resp['message']['message'].includes(
-              'Listo! Tu préstamo personal fue completado.',
+              'Listo! Tu prestamo personal fue completado.',
             )
           ) {
             // reqbal es el balance despues del prestamo, puedes hacer (usr.balance - reqbal) para obtener la cantidad solicitada.
