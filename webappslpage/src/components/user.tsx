@@ -117,7 +117,11 @@ const User = (): JSX.Element => {
   console.log(usr);
   return (
     <div
-      style={{ margin: '0 auto', width: '100%', height: 'calc(100vh - 100px)' }}
+      style={{
+        margin: '0 auto',
+        width: '100%',
+        minHeight: 'calc(100vh - 100px)',
+      }}
       id="user"
     >
       <Typography variant="h2" component="h1" align="center">

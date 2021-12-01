@@ -35,7 +35,11 @@ const Details = (): JSX.Element => {
 
   return (
     <div
-      style={{ margin: '0 auto', width: '100%', height: 'calc(100vh - 100px)' }}
+      style={{
+        margin: '0 auto',
+        width: '100%',
+        minHeight: 'calc(100vh - 100px)',
+      }}
       id="user"
     >
       <Card sx={{ minWidth: 275, mx: '5%' }}>
