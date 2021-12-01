@@ -10,7 +10,7 @@ app = Flask(__name__, static_url_path="", static_folder="../static")
 # App settings
 app.config['SECRET_KEY'] = '335f16b52741f2f8525920b30795455c'
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
-    'DATABASE_URL', 'postgresql://postgres:1148@localhost:5432/chatbot')
+    'DATABASE_URL', 'postgresql://postgres:1148@localhost:5432/chatbot').replace("postgres://", "postgresql://")
 # Instantiate extensions
 db = SQLAlchemy(app)
 db.create_all()
