@@ -13,12 +13,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
     'DATABASE_URL', 'postgresql://postgres:1148@localhost:5432/chatbot').replace("postgres://", "postgresql://")
 # Instantiate extensions
 db = SQLAlchemy(app)
-db.create_all()
-bcrypt = Bcrypt(app)
-CORS(app)
 
 # Import models
 from chatbot_back import models  # nopep8
+
+db.create_all()
+db.session.commit()
+
+bcrypt = Bcrypt(app)
+CORS(app)
 
 guard = Praetorian()
 guard.init_app(app, models.Cuenta)
