@@ -78,22 +78,22 @@ const User = (): JSX.Element => {
           console.log('wwwwwwwwwwwwwwwwww', usr.username);
           if (
             resp['message']['message'].includes(
-              'Listo! Tu prestamo de nomia fue completado.',
+              'Listo! Tu préstamo de nómina fue completado.',
             )
           ) {
             // reqbal es el balance despues del prestamo, puedes hacer (usr.balance - reqbal) para obtener la cantidad solicitada.
-            var reqbal = Number(resp['message']['message'].match(/\d+/));
+            const reqbal = Number(resp['message']['message'].match(/\d+/));
             blnc.balance = reqbal;
             // Aqui van el post para la tabla "solicitud" con la información del prestamo
             createPayment(usr.balance - reqbal);
             onClientUpdate();
           } else if (
             resp['message']['message'].includes(
-              'Listo! Tu prestamo personal fue completado.',
+              'Listo! Tu préstamo personal fue completado.',
             )
           ) {
             // reqbal es el balance despues del prestamo, puedes hacer (usr.balance - reqbal) para obtener la cantidad solicitada.
-            var reqbal = Number(resp['message']['message'].match(/\d+/));
+            const reqbal = Number(resp['message']['message'].match(/\d+/));
             blnc.balance = reqbal;
             // Aqui van el post para la tabla "solicitud" con la información del prestamo
             createPayment(usr.balance - reqbal);
